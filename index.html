@@ -2,14 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WhatsApp Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script>
       tailwind.config = {
         darkMode: "class",
@@ -46,10 +45,8 @@
     </style>
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-    <!-- Header -->
     <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
-      <div
-        class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center space-x-2">
           <i class="fab fa-whatsapp text-3xl text-whatsapp"></i>
           <h1 class="text-xl font-bold text-gray-800 dark:text-white">
@@ -59,57 +56,57 @@
         <div class="flex items-center space-x-4">
           <button
             id="searchBtn"
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
             <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
           </button>
           <button
             id="themeToggle"
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
             <i
               class="fas fa-moon text-gray-600 dark:text-yellow-300"
-              id="themeIcon"></i>
+              id="themeIcon"
+            ></i>
           </button>
           <button
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
             <i
-              class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+              class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"
+            ></i>
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Search Modal -->
     <div
       id="searchModal"
-      class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden flex items-center justify-center">
-      <div
-        class="bg-white dark:bg-gray-800 rounded-lg p-4 w-full max-w-md mx-4">
+      class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden flex items-center justify-center"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-4 w-full max-w-md mx-4">
         <div
-          class="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2">
+          class="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2"
+        >
           <input
             type="text"
             id="searchInput"
             placeholder="Search products..."
-            class="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
-          <button
-            id="closeSearch"
-            class="ml-2 text-gray-500 dark:text-gray-400">
+            class="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          />
+          <button id="closeSearch" class="ml-2 text-gray-500 dark:text-gray-400">
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <div
-          id="searchResults"
-          class="mt-4 max-h-60 overflow-y-auto hidden">
-          <!-- Search results will appear here -->
-        </div>
+        <div id="searchResults" class="mt-4 max-h-60 overflow-y-auto hidden">
+          </div>
       </div>
     </div>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-4 py-6">
-      <!-- Hero Section -->
       <section
-        class="mb-8 bg-gradient-to-r from-whatsapp to-whatsappDark rounded-xl p-6 text-white">
+        class="mb-8 bg-gradient-to-r from-whatsapp to-whatsappDark rounded-xl p-6 text-white"
+      >
         <div class="max-w-2xl">
           <h2 class="text-3xl font-bold mb-2">Shop Directly on WhatsApp</h2>
           <p class="mb-4">
@@ -131,59 +128,33 @@
         </div>
       </section>
 
-      <!-- Categories -->
       <section class="mb-8">
         <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">
           Categories
         </h2>
         <div
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-tshirt text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Fashion
-            </p>
+          id="categoriesContainer"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+        >
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer skeleton">
+            <div class="w-10 h-10 rounded-full mx-auto mb-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-4 w-3/4 mx-auto bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-mobile-alt text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Electronics
-            </p>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer skeleton">
+            <div class="w-10 h-10 rounded-full mx-auto mb-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-4 w-3/4 mx-auto bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-home text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Home
-            </p>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer skeleton">
+            <div class="w-10 h-10 rounded-full mx-auto mb-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-4 w-3/4 mx-auto bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-utensils text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Food
-            </p>
-          </div>
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-book text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Books
-            </p>
-          </div>
-          <div
-            class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-            <i class="fas fa-plus text-2xl mb-2 text-whatsapp"></i>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              More
-            </p>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer skeleton">
+            <div class="w-10 h-10 rounded-full mx-auto mb-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-4 w-3/4 mx-auto bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         </div>
       </section>
 
-      <!-- Featured Products -->
       <section class="mb-8">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold text-gray-800 dark:text-white">
@@ -195,69 +166,88 @@
         </div>
         <div
           id="productsContainer"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- Skeleton loading -->
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        >
           <div
-            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
+            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300"
+          >
             <div class="skeleton h-48 bg-gray-200 dark:bg-gray-700"></div>
             <div class="p-4">
               <div
-                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"></div>
+                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"
+              ></div>
               <div
-                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"></div>
+                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"
+              ></div>
               <div
-                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"
+              ></div>
             </div>
           </div>
           <div
-            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
+            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300"
+          >
             <div class="skeleton h-48 bg-gray-200 dark:bg-gray-700"></div>
             <div class="p-4">
               <div
-                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"></div>
+                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"
+              ></div>
               <div
-                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"></div>
+                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"
+              ></div>
               <div
-                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"
+              ></div>
             </div>
           </div>
           <div
-            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
+            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300"
+          >
             <div class="skeleton h-48 bg-gray-200 dark:bg-gray-700"></div>
             <div class="p-4">
               <div
-                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"></div>
+                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"
+              ></div>
               <div
-                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"></div>
+                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"
+              ></div>
               <div
-                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"
+              ></div>
             </div>
           </div>
           <div
-            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
+            class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300"
+          >
             <div class="skeleton h-48 bg-gray-200 dark:bg-gray-700"></div>
             <div class="p-4">
               <div
-                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"></div>
+                class="skeleton h-5 w-3/4 bg-gray-200 dark:bg-gray-700 mb-2"
+              ></div>
               <div
-                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"></div>
+                class="skeleton h-4 w-1/2 bg-gray-200 dark:bg-gray-700 mb-3"
+              ></div>
               <div
-                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                class="skeleton h-8 w-full bg-gray-200 dark:bg-gray-700 rounded"
+              ></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- How It Works -->
-      <section class="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+      <section
+        class="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm"
+      >
         <h2
-          class="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white">
+          class="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white"
+        >
           How It Works
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="text-center">
             <div
-              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
               <i class="fas fa-search text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
@@ -269,7 +259,8 @@
           </div>
           <div class="text-center">
             <div
-              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
               <i class="fab fa-whatsapp text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
@@ -281,7 +272,8 @@
           </div>
           <div class="text-center">
             <div
-              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              class="bg-whatsapp bg-opacity-10 dark:bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
               <i class="fas fa-truck text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
@@ -295,14 +287,15 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer
-      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
+    >
       <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3
-              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"
+            >
               WhatsApp Shop
             </h3>
             <p class="text-gray-600 dark:text-gray-400">
@@ -311,35 +304,40 @@
           </div>
           <div>
             <h3
-              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"
+            >
               Quick Links
             </h3>
             <ul class="space-y-2">
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Home
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Products
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Categories
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Contact
                 </a>
               </li>
@@ -347,35 +345,40 @@
           </div>
           <div>
             <h3
-              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"
+            >
               Help
             </h3>
             <ul class="space-y-2">
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   FAQs
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Shipping
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Returns
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp"
+                >
                   Privacy Policy
                 </a>
               </li>
@@ -383,159 +386,177 @@
           </div>
           <div>
             <h3
-              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"
+            >
               Connect With Us
             </h3>
             <div class="flex space-x-4">
               <a
                 href="#"
-                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-whatsapp hover:text-white">
+                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-whatsapp hover:text-white"
+              >
                 <i class="fab fa-whatsapp"></i>
               </a>
               <a
                 href="#"
-                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white">
+                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white"
+              >
                 <i class="fab fa-facebook-f"></i>
               </a>
               <a
                 href="#"
-                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-500 hover:text-white">
+                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-500 hover:text-white"
+              >
                 <i class="fab fa-instagram"></i>
               </a>
               <a
                 href="#"
-                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white">
+                class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white"
+              >
                 <i class="fab fa-twitter"></i>
               </a>
             </div>
           </div>
         </div>
         <div
-          class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center text-gray-600 dark:text-gray-400">
+          class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center text-gray-600 dark:text-gray-400"
+        >
           <p>© 2023 WhatsApp Shop. All rights reserved.</p>
         </div>
       </div>
     </footer>
 
-<script>
-  // Theme Toggle
-  const themeToggle = document.getElementById("themeToggle");
-  const themeIcon = document.getElementById("themeIcon");
-  const html = document.documentElement;
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      const html = document.documentElement;
 
-  // Check for saved theme preference or use system preference
-  if (
-    localStorage.getItem("theme") === "dark" ||
-    (!localStorage.getItem("theme") &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    html.classList.add("dark");
-    themeIcon.classList.replace("fa-moon", "fa-sun");
-  }
+      // Check for saved theme preference or use system preference
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        html.classList.add("dark");
+        themeIcon.classList.replace("fa-moon", "fa-sun");
+      }
 
-  themeToggle.addEventListener("click", () => {
-    html.classList.toggle("dark");
-    if (html.classList.contains("dark")) {
-      localStorage.setItem("theme", "dark");
-      themeIcon.classList.replace("fa-moon", "fa-sun");
-    } else {
-      localStorage.setItem("theme", "light");
-      themeIcon.classList.replace("fa-sun", "fa-moon");
-    }
-  });
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        if (html.classList.contains("dark")) {
+          localStorage.setItem("theme", "dark");
+          themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+          localStorage.setItem("theme", "light");
+          themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
+      });
 
-  // Search Modal
-  const searchBtn = document.getElementById("searchBtn");
-  const searchModal = document.getElementById("searchModal");
-  const closeSearch = document.getElementById("closeSearch");
-  const searchInput = document.getElementById("searchInput");
-  const searchResults = document.getElementById("searchResults");
-  let allProducts = []; // To store all products for search functionality
+      // Search Modal
+      const searchBtn = document.getElementById("searchBtn");
+      const searchModal = document.getElementById("searchModal");
+      const closeSearch = document.getElementById("closeSearch");
+      const searchInput = document.getElementById("searchInput");
+      const searchResults = document.getElementById("searchResults");
+      let allProducts = []; // To store all products for search functionality
 
-  searchBtn.addEventListener("click", () => {
-    searchModal.classList.remove("hidden");
-    searchInput.focus();
-  });
+      searchBtn.addEventListener("click", () => {
+        searchModal.classList.remove("hidden");
+        searchInput.focus();
+      });
 
-  closeSearch.addEventListener("click", () => {
-    searchModal.classList.add("hidden");
-  });
+      closeSearch.addEventListener("click", () => {
+        searchModal.classList.add("hidden");
+      });
 
-  searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.trim().toLowerCase();
-    if (query.length > 0) {
-      filterProducts(query);
-    } else {
-      searchResults.classList.add("hidden");
-    }
-  });
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        if (query.length > 0) {
+          filterProducts(query);
+        } else {
+          searchResults.classList.add("hidden");
+        }
+      });
 
-  function filterProducts(query) {
-    searchResults.innerHTML = `
+      function filterProducts(query) {
+        searchResults.innerHTML = `
                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
                     <i class="fas fa-spinner fa-spin mr-2"></i> Searching for "${query}"
                 </div>
             `;
-    searchResults.classList.remove("hidden");
+        searchResults.classList.remove("hidden");
 
-    const filteredResults = allProducts.filter(
-      (product) =>
-        product.name.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query)
-    );
+        const filteredResults = allProducts.filter(
+          (product) =>
+            product.name.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query)
+        );
 
-    setTimeout(() => {
-      if (filteredResults.length > 0) {
-        searchResults.innerHTML = "";
-        filteredResults.forEach((item) => {
-          const resultItem = document.createElement("div");
-          resultItem.className =
-            "p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-0";
-          resultItem.innerHTML = `
+        setTimeout(() => {
+          if (filteredResults.length > 0) {
+            searchResults.innerHTML = "";
+            filteredResults.forEach((item) => {
+              const resultItem = document.createElement("div");
+              resultItem.className =
+                "p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-0";
+              resultItem.innerHTML = `
                                 <div class="font-medium text-gray-800 dark:text-white">${item.name}</div>
                                 <div class="text-sm text-gray-500 dark:text-gray-400">${item.harga} • ${item.category}</div>
                             `;
-          resultItem.addEventListener("click", () => {
-            alert(`Navigating to ${item.name}`);
-            searchModal.classList.add("hidden");
-          });
-          searchResults.appendChild(resultItem);
-        });
-      } else {
-        searchResults.innerHTML = `
+              resultItem.addEventListener("click", () => {
+                alert(`Navigating to ${item.name}`);
+                searchModal.classList.add("hidden");
+              });
+              searchResults.appendChild(resultItem);
+            });
+          } else {
+            searchResults.innerHTML = `
                                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
                                     No results found for "${query}"
                                 </div>
                             `;
+          }
+        }, 300);
       }
-    }, 300);
-  }
 
-  // Load products from JSON file
-  document.addEventListener("DOMContentLoaded", () => {
-    // Ini adalah Raw URL Gist yang Anda berikan
-    const GIST_RAW_URL = "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/53427b176948b0dcbf9dcc9434c941d8db4076da/produk.json";
+      // Buy on WhatsApp function
+      function buyOnWhatsApp(productName, price, imageUrl, whatsappNumber) {
+        const message = `Hello! I'm interested in buying:\n\n*${productName}*\nPrice: ${price}\n\nCan you provide more details?`;
+        const encodedMessage = encodeURIComponent(message);
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
+          "_blank"
+        );
+      }
 
-    fetch(GIST_RAW_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const products = data.items;
-        const whatsappNumber = data.nomber;
-        allProducts = products;
-        const productsContainer =
-          document.getElementById("productsContainer");
-        productsContainer.innerHTML = "";
+      // Load products and categories from JSON file
+      document.addEventListener("DOMContentLoaded", () => {
+        const GIST_RAW_URL =
+          "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/53427b176948b0dcbf9dcc9434c941d8db4076da/produk.json";
 
-        products.forEach((product) => {
-          const productCard = document.createElement("div");
-          productCard.className =
-            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
-          productCard.innerHTML = `
+        fetch(GIST_RAW_URL)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const products = data.items;
+            const categories = data.category; // Ambil data kategori
+            const whatsappNumber = data.nomber;
+            allProducts = products;
+
+            // Render Products
+            const productsContainer =
+              document.getElementById("productsContainer");
+            productsContainer.innerHTML = ""; // Clear skeleton loaders
+            products.forEach((product) => {
+              const productCard = document.createElement("div");
+              productCard.className =
+                "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
+              productCard.innerHTML = `
                                 <div class="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                                     <img src="${product.images}" alt="${product.name}" class="h-full object-contain p-4">
                                 </div>
@@ -549,34 +570,55 @@
                                     </button>
                                 </div>
                             `;
-          productsContainer.appendChild(productCard);
-        });
-      })
-      .catch((error) => {
-        console.error("Error loading products:", error);
-        const productsContainer =
-          document.getElementById("productsContainer");
-        productsContainer.innerHTML = `
+              productsContainer.appendChild(productCard);
+            });
+
+            // Render Categories
+            const categoriesContainer = document.getElementById("categoriesContainer");
+            categoriesContainer.innerHTML = ""; // Clear skeleton loaders
+            const categoryIcons = {
+                "mobile legends": "fas fa-gamepad", // Contoh mapping manual
+                "pubg": "fas fa-crosshairs",       // Contoh mapping manual
+                // Tambahkan mapping untuk kategori lain jika ada
+            };
+
+            categories.forEach((categoryName) => {
+                const iconClass = categoryIcons[categoryName.toLowerCase()] || "fas fa-box"; // Fallback icon
+                const categoryCard = document.createElement("div");
+                categoryCard.className =
+                    "bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition";
+                categoryCard.innerHTML = `
+                    <i class="${iconClass} text-2xl mb-2 text-whatsapp"></i>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">${categoryName}</p>
+                `;
+                categoriesContainer.appendChild(categoryCard);
+            });
+
+          })
+          .catch((error) => {
+            console.error("Error loading data:", error); // Ubah pesan error
+            const productsContainer =
+              document.getElementById("productsContainer");
+            productsContainer.innerHTML = `
                             <div class="col-span-full text-center py-8">
                                 <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-3"></i>
-                                <p class="text-gray-600 dark:text-gray-400">Failed to load products from Gist. Please check the Gist URL and your internet connection. (Error: ${error.message})</p>
+                                <p class="text-gray-600 dark:text-gray-400">Failed to load products. Please check the Gist URL and your internet connection. (Error: ${error.message})</p>
                                 <button class="mt-4 bg-whatsapp text-white px-4 py-2 rounded-md" onclick="location.reload()">
                                     <i class="fas fa-sync-alt mr-2"></i> Reload
                                 </button>
                             </div>
                         `;
+            // Juga tambahkan pesan error untuk kategori jika perlu
+            const categoriesContainer = document.getElementById("categoriesContainer");
+            if (categoriesContainer) {
+                categoriesContainer.innerHTML = `
+                    <div class="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
+                        Failed to load categories.
+                    </div>
+                `;
+            }
+          });
       });
-  });
-
-  // Buy on WhatsApp function
-  function buyOnWhatsApp(productName, price, imageUrl, whatsappNumber) {
-    const message = `Hello! I'm interested in buying:\n\n*${productName}*\nPrice: ${price}\n\nCan you provide more details?`;
-    const encodedMessage = encodeURIComponent(message);
-    window.open(
-      `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
-      "_blank"
-    );
-  }
-</script>
+    </script>
   </body>
 </html>
