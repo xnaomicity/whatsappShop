@@ -417,165 +417,166 @@
       </div>
     </footer>
 
-    <script>
-      // Theme Toggle
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-      const html = document.documentElement;
+<script>
+  // Theme Toggle
+  const themeToggle = document.getElementById("themeToggle");
+  const themeIcon = document.getElementById("themeIcon");
+  const html = document.documentElement;
 
-      // Check for saved theme preference or use system preference
-      if (
-        localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        html.classList.add("dark");
-        themeIcon.classList.replace("fa-moon", "fa-sun");
-      }
+  // Check for saved theme preference or use system preference
+  if (
+    localStorage.getItem("theme") === "dark" ||
+    (!localStorage.getItem("theme") &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    html.classList.add("dark");
+    themeIcon.classList.replace("fa-moon", "fa-sun");
+  }
 
-      themeToggle.addEventListener("click", () => {
-        html.classList.toggle("dark");
-        if (html.classList.contains("dark")) {
-          localStorage.setItem("theme", "dark");
-          themeIcon.classList.replace("fa-moon", "fa-sun");
-        } else {
-          localStorage.setItem("theme", "light");
-          themeIcon.classList.replace("fa-sun", "fa-moon");
-        }
-      });
+  themeToggle.addEventListener("click", () => {
+    html.classList.toggle("dark");
+    if (html.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+      themeIcon.classList.replace("fa-moon", "fa-sun");
+    } else {
+      localStorage.setItem("theme", "light");
+      themeIcon.classList.replace("fa-sun", "fa-moon");
+    }
+  });
 
-      // Search Modal
-      const searchBtn = document.getElementById("searchBtn");
-      const searchModal = document.getElementById("searchModal");
-      const closeSearch = document.getElementById("closeSearch");
-      const searchInput = document.getElementById("searchInput");
-      const searchResults = document.getElementById("searchResults");
-      let allProducts = []; // To store all products for search functionality
+  // Search Modal
+  const searchBtn = document.getElementById("searchBtn");
+  const searchModal = document.getElementById("searchModal");
+  const closeSearch = document.getElementById("closeSearch");
+  const searchInput = document.getElementById("searchInput");
+  const searchResults = document.getElementById("searchResults");
+  let allProducts = []; // To store all products for search functionality
 
-      searchBtn.addEventListener("click", () => {
-        searchModal.classList.remove("hidden");
-        searchInput.focus();
-      });
+  searchBtn.addEventListener("click", () => {
+    searchModal.classList.remove("hidden");
+    searchInput.focus();
+  });
 
-      closeSearch.addEventListener("click", () => {
-        searchModal.classList.add("hidden");
-      });
+  closeSearch.addEventListener("click", () => {
+    searchModal.classList.add("hidden");
+  });
 
-      searchInput.addEventListener("input", (e) => {
-        const query = e.target.value.trim().toLowerCase();
-        if (query.length > 0) {
-          // Changed from 2 to 0 to allow search for single characters
-          filterProducts(query);
-        } else {
-          searchResults.classList.add("hidden");
-        }
-      });
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    if (query.length > 0) {
+      filterProducts(query);
+    } else {
+      searchResults.classList.add("hidden");
+    }
+  });
 
-      function filterProducts(query) {
-        searchResults.innerHTML = `
+  function filterProducts(query) {
+    searchResults.innerHTML = `
                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
                     <i class="fas fa-spinner fa-spin mr-2"></i> Searching for "${query}"
                 </div>
             `;
-        searchResults.classList.remove("hidden");
+    searchResults.classList.remove("hidden");
 
-        const filteredResults = allProducts.filter(
-          (product) =>
-            product.name.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
-        );
+    const filteredResults = allProducts.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+    );
 
-        setTimeout(() => {
-          // Simulate a small delay for search
-          if (filteredResults.length > 0) {
-            searchResults.innerHTML = "";
-            filteredResults.forEach((item) => {
-              const resultItem = document.createElement("div");
-              resultItem.className =
-                "p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-0";
-              resultItem.innerHTML = `
+    setTimeout(() => {
+      if (filteredResults.length > 0) {
+        searchResults.innerHTML = "";
+        filteredResults.forEach((item) => {
+          const resultItem = document.createElement("div");
+          resultItem.className =
+            "p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-0";
+          resultItem.innerHTML = `
                                 <div class="font-medium text-gray-800 dark:text-white">${item.name}</div>
                                 <div class="text-sm text-gray-500 dark:text-gray-400">${item.harga} • ${item.category}</div>
                             `;
-              resultItem.addEventListener("click", () => {
-                alert(`Navigating to ${item.name}`); // Replace with actual navigation if needed
-                searchModal.classList.add("hidden");
-              });
-              searchResults.appendChild(resultItem);
-            });
-          } else {
-            searchResults.innerHTML = `
-                            <div class="p-4 text-center text-gray-500 dark:text-gray-400">
-                                No results found for "${query}"
-                            </div>
-                        `;
-          }
-        }, 300); // Reduced simulated delay
+          resultItem.addEventListener("click", () => {
+            alert(`Navigating to ${item.name}`);
+            searchModal.classList.add("hidden");
+          });
+          searchResults.appendChild(resultItem);
+        });
+      } else {
+        searchResults.innerHTML = `
+                                <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+                                    No results found for "${query}"
+                                </div>
+                            `;
       }
+    }, 300);
+  }
 
-      // Load products from JSON file
-      document.addEventListener("DOMContentLoaded", () => {
-        fetch("public/produk.json")
-          .then((response) => response.json())
-          .then((data) => {
-            const products = data.items;
-            const whatsappNumber = data.nomber; // Get WhatsApp number from JSON
-            allProducts = products; // Store products for search
-            const productsContainer =
-              document.getElementById("productsContainer");
-            productsContainer.innerHTML = "";
+  // Load products from JSON file
+  document.addEventListener("DOMContentLoaded", () => {
+    // Ini adalah Raw URL Gist yang Anda berikan
+    const GIST_RAW_URL = "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/53427b176948b0dcbf9dcc9434c941d8db4076da/produk.json";
 
-            products.forEach((product) => {
-              const productCard = document.createElement("div");
-              productCard.className =
-                "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
-              productCard.innerHTML = `
-                            <div class="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                <img src="${product.images}" alt="${product.name}" class="h-full object-contain p-4">
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-medium text-gray-800 dark:text-white mb-1 truncate">${product.name}</h3>
-                                <p class="text-whatsapp font-semibold mb-3">${product.harga}</p>
-                                <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
-                                    onclick="buyOnWhatsApp('${product.name}', '${product.harga}', '${product.images}', '${whatsappNumber}')">
-                                    <i class="fab fa-whatsapp"></i>
-                                    <span>Buy Now</span>
+    fetch(GIST_RAW_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const products = data.items;
+        const whatsappNumber = data.nomber;
+        allProducts = products;
+        const productsContainer =
+          document.getElementById("productsContainer");
+        productsContainer.innerHTML = "";
+
+        products.forEach((product) => {
+          const productCard = document.createElement("div");
+          productCard.className =
+            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
+          productCard.innerHTML = `
+                                <div class="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <img src="${product.images}" alt="${product.name}" class="h-full object-contain p-4">
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-medium text-gray-800 dark:text-white mb-1 truncate">${product.name}</h3>
+                                    <p class="text-whatsapp font-semibold mb-3">${product.harga}</p>
+                                    <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
+                                        onclick="buyOnWhatsApp('${product.name}', '${product.harga}', '${product.images}', '${whatsappNumber}')">
+                                        <i class="fab fa-whatsapp"></i>
+                                        <span>Buy Now</span>
+                                    </button>
+                                </div>
+                            `;
+          productsContainer.appendChild(productCard);
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading products:", error);
+        const productsContainer =
+          document.getElementById("productsContainer");
+        productsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-8">
+                                <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-3"></i>
+                                <p class="text-gray-600 dark:text-gray-400">Failed to load products from Gist. Please check the Gist URL and your internet connection. (Error: ${error.message})</p>
+                                <button class="mt-4 bg-whatsapp text-white px-4 py-2 rounded-md" onclick="location.reload()">
+                                    <i class="fas fa-sync-alt mr-2"></i> Reload
                                 </button>
                             </div>
                         `;
-              productsContainer.appendChild(productCard);
-            });
-          })
-          .catch((error) => {
-            console.error("Error loading products:", error);
-            const productsContainer =
-              document.getElementById("productsContainer");
-            productsContainer.innerHTML = `
-                        <div class="col-span-full text-center py-8">
-                            <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-3"></i>
-                            <p class="text-gray-600 dark:text-gray-400">Failed to load products. Please check 'produk.json' and try again.</p>
-                            <button class="mt-4 bg-whatsapp text-white px-4 py-2 rounded-md" onclick="location.reload()">
-                                <i class="fas fa-sync-alt mr-2"></i> Reload
-                            </button>
-                        </div>
-                    `;
-          });
       });
+  });
 
-      // Buy on WhatsApp function
-      function buyOnWhatsApp(productName, price, imageUrl, whatsappNumber) {
-        // Format the message with product details
-        const message = `Hello! I'm interested in buying:\n\n*${productName}*\nPrice: ${price}\n\nCan you provide more details?`;
-
-        // Encode the message for URL
-        const encodedMessage = encodeURIComponent(message);
-
-        // Open WhatsApp with the message
-        window.open(
-          `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
-          "_blank"
-        );
-      }
-    </script>
+  // Buy on WhatsApp function
+  function buyOnWhatsApp(productName, price, imageUrl, whatsappNumber) {
+    const message = `Hello! I'm interested in buying:\n\n*${productName}*\nPrice: ${price}\n\nCan you provide more details?`;
+    const encodedMessage = encodeURIComponent(message);
+    window.open(
+      `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
+      "_blank"
+    );
+  }
+</script>
   </body>
 </html>
