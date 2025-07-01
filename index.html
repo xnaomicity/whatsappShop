@@ -638,7 +638,7 @@
 
           // Tentukan judul kartu: jika ada diamonds, tampilkan nama server dan flag; jika tidak, tampilkan nama produk
           const cardTitle = item.diamonds
-            ? `${item.serverName} ${item.serverFlag}`
+            ? `${item.serverName}`
             : item.productName;
 
           productCard.innerHTML = `
@@ -806,7 +806,7 @@
                       diamonds: null, // Tidak ada diamonds spesifik
                       displayPrice: product.harga,
                       imageUrl: product.images,
-                      displayText: `${product.name} - ${server.name} ${server.flag}`, // Untuk pencarian
+                      displayText: `${product.name} - ${server.name}`, // Untuk pencarian
                     });
                   }
                 });
