@@ -120,80 +120,6 @@
       </div>
     </div>
 
-    <!-- Modal detail produk -->
-    <div
-      id="productDetailModal"
-      class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden flex items-center justify-center p-4">
-      <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto transform transition-all sm:my-8 sm:align-middle sm:max-w-lg">
-        <div class="flex justify-between items-center mb-4">
-          <h3
-            class="text-2xl font-bold text-gray-900 dark:text-white"
-            id="modalProductName">
-            Nama Produk
-          </h3>
-          <button
-            id="closeProductDetailModal"
-            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-        <div class="flex flex-col md:flex-row gap-6">
-          <div class="md:w-1/2">
-            <img
-              id="modalProductImage"
-              src="https://placehold.co/400x300/e0e0e0/ffffff?text=Product"
-              alt="Product Image"
-              class="w-full h-auto rounded-lg object-contain" />
-          </div>
-          <div class="md:w-1/2">
-            <p class="text-gray-700 dark:text-gray-300 mb-2">
-              Harga:
-              <span
-                class="font-semibold text-whatsapp"
-                id="modalProductPrice">
-                Rp 0
-              </span>
-            </p>
-            <div
-              id="serverSelection"
-              class="mb-4 hidden">
-              <label
-                for="serverSelect"
-                class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                Pilih Server:
-              </label>
-              <select
-                id="serverSelect"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
-                <!-- Opsi server akan dimuat di sini -->
-              </select>
-            </div>
-            <div
-              id="optionSelection"
-              class="mb-4 hidden">
-              <label
-                for="optionSelect"
-                class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                Pilih Opsi:
-              </label>
-              <select
-                id="optionSelect"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
-                <!-- Opsi berlian akan dimuat di sini -->
-              </select>
-            </div>
-            <button
-              id="modalBuyButton"
-              class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-3 rounded-md flex items-center justify-center space-x-2 text-lg font-semibold transition duration-200">
-              <i class="fab fa-whatsapp"></i>
-              <span>Beli Sekarang</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Modal pesan kustom (pengganti alert) -->
     <div
       id="customMessageModal"
@@ -292,6 +218,23 @@
             Lihat Semua
           </button>
         </div>
+
+        <!-- Dropdown Server (akan ditampilkan/disembunyikan oleh JS) -->
+        <div
+          id="serverDropdownContainer"
+          class="mb-4 hidden">
+          <label
+            for="serverSelect"
+            class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+            Pilih Server:
+          </label>
+          <select
+            id="serverSelect"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+            <!-- Opsi server akan dimuat di sini -->
+          </select>
+        </div>
+
         <div
           id="productsContainer"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -528,29 +471,27 @@
       const searchInput = document.getElementById("searchInput");
       const searchResults = document.getElementById("searchResults");
 
-      const productDetailModal = document.getElementById("productDetailModal");
-      const closeProductDetailModal = document.getElementById(
-        "closeProductDetailModal"
-      );
-      const modalProductName = document.getElementById("modalProductName");
-      const modalProductImage = document.getElementById("modalProductImage");
-      const modalProductPrice = document.getElementById("modalProductPrice");
-      const serverSelection = document.getElementById("serverSelection");
-      const serverSelect = document.getElementById("serverSelect");
-      const optionSelection = document.getElementById("optionSelection");
-      const optionSelect = document.getElementById("optionSelect");
-      const modalBuyButton = document.getElementById("modalBuyButton");
-
       const customMessageModal = document.getElementById("customMessageModal");
       const customMessageText = document.getElementById("customMessageText");
       const closeCustomMessageModal = document.getElementById(
         "closeCustomMessageModal"
       );
 
-      let allProducts = []; // Menyimpan semua produk untuk fungsionalitas pencarian
+      const productsSectionTitle = document.getElementById(
+        "productsSectionTitle"
+      );
+      const viewAllProductsBtn = document.getElementById("viewAllProductsBtn");
+
+      const serverDropdownContainer = document.getElementById(
+        "serverDropdownContainer"
+      );
+      const serverSelect = document.getElementById("serverSelect");
+
+      let allProductsRawData = []; // Menyimpan semua data produk asli dari JSON
+      let allPurchasableItems = []; // Menyimpan semua item yang dapat dibeli (produk + server + opsi)
       let whatsappNumber = ""; // Menyimpan nomor WhatsApp secara global
       let currentActiveCategory = null; // Melacak kategori yang sedang aktif
-      let selectedProduct = null; // Menyimpan produk yang sedang dilihat di modal
+      let currentActiveServer = null; // Melacak server yang sedang aktif
 
       // Fungsi untuk menampilkan modal pesan kustom
       function showCustomMessage(message) {
@@ -614,10 +555,11 @@
             `;
         searchResults.classList.remove("hidden");
 
-        const filteredResults = allProducts.filter(
-          (product) =>
-            product.name.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
+        const filteredResults = allPurchasableItems.filter(
+          (item) =>
+            item.displayText.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query) ||
+            (item.serverName && item.serverName.toLowerCase().includes(query))
         );
 
         setTimeout(() => {
@@ -628,12 +570,14 @@
               resultItem.className =
                 "p-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-0";
               resultItem.innerHTML = `
-                                <div class="font-medium text-gray-800 dark:text-white">${item.name}</div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">${item.harga} • ${item.category}</div>
+                                <div class="font-medium text-gray-800 dark:text-white">${item.displayText}</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">${item.displayPrice} • ${item.category}</div>
                             `;
               resultItem.addEventListener("click", () => {
-                showCustomMessage(`Menavigasi ke ${item.name}`); // Menggunakan modal kustom
+                showCustomMessage(`Menavigasi ke ${item.displayText}`); // Menggunakan modal kustom
                 searchModal.classList.add("hidden");
+                // Opsional: Anda bisa menambahkan logika untuk menggulir ke kartu yang ditemukan
+                // Misalnya, dengan memberikan ID unik ke setiap kartu dan menggunakan scrollIntoView()
               });
               searchResults.appendChild(resultItem);
             });
@@ -647,93 +591,17 @@
         }, 300);
       }
 
-      // Fungsi untuk menampilkan detail produk di modal
-      function showProductDetail(product) {
-        selectedProduct = product; // Set produk yang dipilih
-        modalProductName.textContent = product.name;
-        modalProductImage.src = product.images;
-        modalProductImage.alt = product.name;
-        modalProductPrice.textContent = product.harga;
-
-        // Reset dan sembunyikan pilihan server/opsi secara default
-        serverSelection.classList.add("hidden");
-        optionSelection.classList.add("hidden");
-        serverSelect.innerHTML = "";
-        optionSelect.innerHTML = "";
-
-        if (product.servers && product.servers.length > 0) {
-          serverSelection.classList.remove("hidden");
-          product.servers.forEach((server, index) => {
-            const option = document.createElement("option");
-            option.value = index; // Menggunakan indeks sebagai nilai
-            option.textContent = `${server.name} ${server.flag}`;
-            serverSelect.appendChild(option);
-          });
-
-          // Tampilkan opsi pertama dari server pertama secara default
-          displayOptionsForServer(product.servers[0]);
-
-          serverSelect.onchange = (event) => {
-            const selectedServerIndex = event.target.value;
-            displayOptionsForServer(product.servers[selectedServerIndex]);
-          };
+      // Fungsi untuk membeli di WhatsApp
+      function buyOnWhatsApp(itemData) {
+        let message = `Halo! Saya tertarik untuk membeli:\n\n*${itemData.productName}`;
+        if (itemData.serverName) {
+          message += ` - ${itemData.serverName} ${itemData.serverFlag}`;
         }
-
-        productDetailModal.classList.remove("hidden");
-      }
-
-      // Fungsi untuk menampilkan opsi berlian/harga berdasarkan server yang dipilih
-      function displayOptionsForServer(server) {
-        optionSelect.innerHTML = ""; // Bersihkan opsi sebelumnya
-        if (server.options && server.options.length > 0) {
-          optionSelection.classList.remove("hidden");
-          server.options.forEach((optionData, index) => {
-            const option = document.createElement("option");
-            option.value = index; // Menggunakan indeks sebagai nilai
-            // Menyesuaikan tampilan opsi berdasarkan adanya 'diamonds' atau tidak
-            if (optionData.diamonds) {
-              option.textContent = `${optionData.diamonds} Diamonds - ${optionData.price}`;
-            } else {
-              option.textContent = optionData.price; // Jika tidak ada berlian, tampilkan hanya harga
-            }
-            optionSelect.appendChild(option);
-          });
-        } else {
-          optionSelection.classList.add("hidden");
+        if (itemData.diamonds) {
+          message += ` - ${itemData.diamonds} Diamonds`;
         }
-      }
-
-      // Menutup modal detail produk
-      closeProductDetailModal.addEventListener("click", () => {
-        productDetailModal.classList.add("hidden");
-      });
-
-      // Fungsi untuk membeli di WhatsApp dari modal detail produk
-      modalBuyButton.addEventListener("click", () => {
-        if (!selectedProduct) return;
-
-        let message = `Halo! Saya tertarik untuk membeli:\n\n*${selectedProduct.name}*\n`;
-        let selectedPrice = selectedProduct.harga; // Harga default dari produk
-
-        if (selectedProduct.servers && selectedProduct.servers.length > 0) {
-          const selectedServerIndex = serverSelect.value;
-          const selectedServer = selectedProduct.servers[selectedServerIndex];
-          message += `Server: ${selectedServer.name} ${selectedServer.flag}\n`;
-
-          if (selectedServer.options && selectedServer.options.length > 0) {
-            const selectedOptionIndex = optionSelect.value;
-            const selectedOption = selectedServer.options[selectedOptionIndex];
-
-            if (selectedOption.diamonds) {
-              message += `Jumlah: ${selectedOption.diamonds} Diamonds\n`;
-            }
-            selectedPrice = selectedOption.price;
-            message += `Harga: ${selectedPrice}\n`;
-          }
-        } else {
-          message += `Harga: ${selectedPrice}\n`;
-        }
-
+        message += `*\n`;
+        message += `Harga: ${itemData.displayPrice}\n`;
         message += `\nBisakah Anda memberikan detail lebih lanjut?`;
 
         const encodedMessage = encodeURIComponent(message);
@@ -741,15 +609,14 @@
           `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
           "_blank"
         );
-        productDetailModal.classList.add("hidden"); // Tutup modal setelah mengklik beli
-      });
+      }
 
       // Fungsi untuk menampilkan produk di container
-      function displayProducts(productsToDisplay) {
+      function displayProducts(itemsToDisplay) {
         const productsContainer = document.getElementById("productsContainer");
         productsContainer.innerHTML = ""; // Bersihkan produk atau skeleton yang ada
 
-        if (productsToDisplay.length === 0) {
+        if (itemsToDisplay.length === 0) {
           productsContainer.innerHTML = `
             <div class="col-span-full text-center py-8">
               <i class="fas fa-box-open text-3xl text-gray-400 mb-3"></i>
@@ -759,53 +626,207 @@
           return;
         }
 
-        productsToDisplay.forEach((product) => {
+        itemsToDisplay.forEach((item) => {
           const productCard = document.createElement("div");
           productCard.className =
-            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300 cursor-pointer"; // Tambahkan cursor-pointer
+            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
+
+          // Tentukan teks untuk diamonds, jika ada
+          const diamondsText = item.diamonds
+            ? `<p class="text-gray-700 dark:text-gray-300">Diamonds: <span class="font-semibold">${item.diamonds}</span></p>`
+            : "";
+
+          // Tentukan judul kartu: jika ada diamonds, tampilkan nama server dan flag; jika tidak, tampilkan nama produk
+          const cardTitle = item.diamonds
+            ? `${item.serverName} ${item.serverFlag}`
+            : item.productName;
+
           productCard.innerHTML = `
                         <div class="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                            <img src="${product.images}" alt="${product.name}" class="h-full object-contain p-4">
+                            <img src="${item.imageUrl}" alt="${item.productName}" class="h-full object-contain p-4">
                         </div>
                         <div class="p-4">
-                            <h3 class="font-medium text-gray-800 dark:text-white mb-1 truncate">${product.name}</h3>
-                            <p class="text-whatsapp font-semibold mb-3">${product.harga}</p>
-                            <!-- Tombol ini sekarang akan membuka modal detail produk -->
-                            <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
-                                data-product-id="${product.name}"> <!-- Gunakan ID produk untuk identifikasi -->
-                                <i class="fas fa-info-circle"></i>
-                                <span>Lihat Detail</span>
+                            <h3 class="font-medium text-gray-800 dark:text-white mb-1 truncate">${cardTitle}</h3>
+                            ${diamondsText}
+                            <p class="text-whatsapp font-semibold mb-3">${item.displayPrice}</p>
+                            <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2 buy-button">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>Beli Sekarang</span>
                             </button>
                         </div>
                     `;
           productsContainer.appendChild(productCard);
 
-          // Tambahkan event listener untuk tombol "Lihat Detail"
+          // Tambahkan event listener untuk tombol "Beli Sekarang"
           productCard
-            .querySelector("button")
-            .addEventListener("click", () => showProductDetail(product));
+            .querySelector(".buy-button")
+            .addEventListener("click", () => buyOnWhatsApp(item));
         });
+      }
+
+      // Fungsi untuk mengisi dropdown server
+      function populateServerDropdown(category) {
+        serverSelect.innerHTML = ""; // Bersihkan opsi sebelumnya
+        const serversInSelectedCategory = new Set();
+
+        // Ambil server unik untuk kategori yang dipilih
+        allProductsRawData.forEach((product) => {
+          if (product.category.toLowerCase() === category.toLowerCase()) {
+            if (product.servers && product.servers.length > 0) {
+              product.servers.forEach((server) => {
+                serversInSelectedCategory.add(
+                  JSON.stringify({
+                    name: server.name,
+                    flag: server.flag,
+                  })
+                );
+              });
+            }
+          }
+        });
+
+        // Tambahkan opsi "Semua Server"
+        const allServersOption = document.createElement("option");
+        allServersOption.value = "all";
+        allServersOption.textContent = "Semua Server";
+        serverSelect.appendChild(allServersOption);
+
+        // Tambahkan server unik ke dropdown
+        serversInSelectedCategory.forEach((serverString) => {
+          const server = JSON.parse(serverString);
+          const option = document.createElement("option");
+          option.value = server.name;
+          option.textContent = `${server.name} ${server.flag}`;
+          serverSelect.appendChild(option);
+        });
+
+        serverDropdownContainer.classList.remove("hidden"); // Tampilkan dropdown
+        currentActiveServer = "all"; // Set default ke "Semua Server"
+      }
+
+      // Event listener untuk perubahan dropdown server
+      serverSelect.addEventListener("change", (event) => {
+        currentActiveServer = event.target.value;
+        filterAndDisplayItems();
+      });
+
+      // Fungsi untuk memfilter dan menampilkan item berdasarkan kategori dan server aktif
+      function filterAndDisplayItems() {
+        let filteredItems = allPurchasableItems;
+
+        if (currentActiveCategory && currentActiveCategory !== "all") {
+          filteredItems = filteredItems.filter(
+            (item) => item.category.toLowerCase() === currentActiveCategory
+          );
+        }
+
+        if (currentActiveServer && currentActiveServer !== "all") {
+          filteredItems = filteredItems.filter(
+            (item) =>
+              item.serverName &&
+              item.serverName.toLowerCase() ===
+                currentActiveServer.toLowerCase()
+          );
+        }
+
+        displayProducts(filteredItems);
       }
 
       // Muat produk dan kategori dari file JSON
       document.addEventListener("DOMContentLoaded", () => {
+        // GIST_RAW_URL telah diperbarui ke URL terbaru Anda
         const GIST_RAW_URL =
-          "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/cbb39368f658c3739d3e7891d5196deb7f316885/produk.json"; // URL Gist yang diperbarui
+          "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/f984c2c68ae8e280357270f2a7c240d524688717/produk.json";
 
         fetch(GIST_RAW_URL)
           .then((response) => {
+            console.log(
+              "Response status:",
+              response.status,
+              response.statusText
+            );
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
           })
           .then((data) => {
-            allProducts = data.items; // Simpan semua produk
-            const categories = data.category;
-            whatsappNumber = data.nomber; // Simpan nomor WhatsApp
+            console.log("Data loaded successfully:", data);
 
-            // Tampilan awal semua produk
-            displayProducts(allProducts);
+            if (!data.items || !Array.isArray(data.items)) {
+              throw new Error(
+                "Data JSON tidak memiliki properti 'items' berupa array."
+              );
+            }
+            if (!data.category || !Array.isArray(data.category)) {
+              throw new Error(
+                "Data JSON tidak memiliki properti 'category' berupa array."
+              );
+            }
+            if (!data.nomber) {
+              throw new Error(
+                "Data JSON tidak memiliki properti 'nomber' (nomor WhatsApp)."
+              );
+            }
+
+            whatsappNumber = data.nomber; // Simpan nomor WhatsApp
+            allProductsRawData = data.items; // Simpan data item asli
+
+            // Flatten the product data into purchasable items
+            allPurchasableItems = [];
+            data.items.forEach((product) => {
+              if (product.servers && product.servers.length > 0) {
+                product.servers.forEach((server) => {
+                  if (server.options && server.options.length > 0) {
+                    server.options.forEach((option) => {
+                      allPurchasableItems.push({
+                        productName: product.name,
+                        category: product.category,
+                        serverName: server.name,
+                        serverFlag: server.flag,
+                        diamonds: option.diamonds,
+                        displayPrice: option.price,
+                        imageUrl: product.images,
+                        displayText: `${product.name} - ${server.name} ${
+                          server.flag
+                        }${
+                          option.diamonds
+                            ? " - " + option.diamonds + " Diamonds"
+                            : ""
+                        }`, // Untuk pencarian
+                      });
+                    });
+                  } else {
+                    // Jika server ada tapi tidak ada opsi spesifik, gunakan harga produk utama
+                    allPurchasableItems.push({
+                      productName: product.name,
+                      category: product.category,
+                      serverName: server.name,
+                      serverFlag: server.flag,
+                      diamonds: null, // Tidak ada diamonds spesifik
+                      displayPrice: product.harga,
+                      imageUrl: product.images,
+                      displayText: `${product.name} - ${server.name} ${server.flag}`, // Untuk pencarian
+                    });
+                  }
+                });
+              } else {
+                // Produk tanpa server atau opsi
+                allPurchasableItems.push({
+                  productName: product.name,
+                  category: product.category,
+                  serverName: null,
+                  serverFlag: null,
+                  diamonds: null,
+                  displayPrice: product.harga,
+                  imageUrl: product.images,
+                  displayText: product.name, // Untuk pencarian
+                });
+              }
+            });
+
+            // Tampilan awal semua produk yang sudah didatarkan
+            displayProducts(allPurchasableItems);
 
             // Render Kategori
             const categoriesContainer = document.getElementById(
@@ -814,13 +835,17 @@
             categoriesContainer.innerHTML = ""; // Bersihkan skeleton loaders
             const categoryIcons = {
               "mobile legends": "fas fa-gamepad",
-              pubg: "fas fa-crosshairs",
+              "free fire": "fas fa-fire", // Ikon baru untuk Free Fire
               // Tambahkan mapping untuk kategori lain jika ada
             };
 
-            categories.forEach((categoryName) => {
-              const iconClass =
-                categoryIcons[categoryName.toLowerCase()] || "fas fa-box";
+            // Pastikan kategori unik
+            const uniqueCategories = [
+              ...new Set(data.category.map((cat) => cat.toLowerCase())),
+            ];
+
+            uniqueCategories.forEach((categoryName) => {
+              const iconClass = categoryIcons[categoryName] || "fas fa-box";
               const categoryCard = document.createElement("div");
               categoryCard.className =
                 "category-card bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition";
@@ -832,9 +857,6 @@
 
               categoryCard.addEventListener("click", () => {
                 const clickedCategory = categoryName.toLowerCase();
-                const productsSectionTitle = document.getElementById(
-                  "productsSectionTitle"
-                );
                 const currentCards =
                   document.querySelectorAll(".category-card");
 
@@ -843,41 +865,40 @@
 
                 if (currentActiveCategory === clickedCategory) {
                   // Jika kategori yang sama diklik lagi, tampilkan semua produk
-                  displayProducts(allProducts);
                   productsSectionTitle.textContent = "Produk Unggulan";
                   currentActiveCategory = null; // Reset kategori aktif
+                  serverDropdownContainer.classList.add("hidden"); // Sembunyikan dropdown server
+                  currentActiveServer = null;
+                  displayProducts(allPurchasableItems);
                 } else {
                   // Filter produk berdasarkan kategori yang diklik
-                  const filteredProducts = allProducts.filter(
-                    (product) =>
-                      product.category.toLowerCase() === clickedCategory
-                  );
-                  displayProducts(filteredProducts);
                   productsSectionTitle.textContent = `Produk dalam "${categoryName}"`;
                   categoryCard.classList.add("active"); // Tambahkan kelas aktif ke kartu yang diklik
                   currentActiveCategory = clickedCategory; // Atur kategori aktif baru
+
+                  // Isi dan tampilkan dropdown server
+                  populateServerDropdown(currentActiveCategory);
+                  filterAndDisplayItems(); // Tampilkan item berdasarkan kategori dan server default ("all")
                 }
               });
               categoriesContainer.appendChild(categoryCard);
             });
 
             // Tambahkan event listener ke tombol "Lihat Semua Produk"
-            const viewAllProductsBtn =
-              document.getElementById("viewAllProductsBtn");
             viewAllProductsBtn.addEventListener("click", () => {
-              displayProducts(allProducts);
-              const productsSectionTitle = document.getElementById(
-                "productsSectionTitle"
-              );
+              displayProducts(allPurchasableItems);
               productsSectionTitle.textContent = "Produk Unggulan";
               // Hapus kelas aktif dari semua kartu kategori
-              const currentCards = document.querySelectorAll(".category-card");
-              currentCards.forEach((card) => card.classList.remove("active"));
+              document
+                .querySelectorAll(".category-card")
+                .forEach((card) => card.classList.remove("active"));
               currentActiveCategory = null; // Reset kategori aktif
+              serverDropdownContainer.classList.add("hidden"); // Sembunyikan dropdown server
+              currentActiveServer = null;
             });
           })
           .catch((error) => {
-            console.error("Error loading data:", error);
+            console.error("Error loading or parsing data:", error);
             const productsContainer =
               document.getElementById("productsContainer");
             productsContainer.innerHTML = `
