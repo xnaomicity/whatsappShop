@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
     <title>WhatsApp Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -22,13 +24,16 @@
       };
     </script>
     <style>
+      /* Gaya untuk kartu produk saat di-hover */
       .product-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       }
+      /* Gaya untuk kartu produk saat di-hover dalam mode gelap */
       .dark .product-card:hover {
         box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
       }
+      /* Animasi skeleton loader */
       .skeleton {
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
@@ -41,18 +46,21 @@
           opacity: 0.5;
         }
       }
+      /* Gaya untuk kartu kategori aktif */
       .category-card.active {
-        background-color: #e0f2f1; /* Light green for active category */
+        background-color: #e0f2f1; /* Hijau muda untuk kategori aktif */
         border-color: #25d366;
         box-shadow: 0 4px 8px rgba(37, 211, 102, 0.2);
       }
+      /* Gaya untuk kartu kategori aktif dalam mode gelap */
       .dark .category-card.active {
-        background-color: #1a4f36; /* Darker green for active in dark mode */
+        background-color: #1a4f36; /* Hijau lebih gelap untuk kategori aktif dalam mode gelap */
         border-color: #25d366;
       }
     </style>
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <!-- Header aplikasi -->
     <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
       <div
         class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -63,11 +71,13 @@
           </h1>
         </div>
         <div class="flex items-center space-x-4">
+          <!-- Tombol pencarian -->
           <button
             id="searchBtn"
             class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
             <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
           </button>
+          <!-- Tombol pengalih tema (terang/gelap) -->
           <button
             id="themeToggle"
             class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
@@ -75,6 +85,7 @@
               class="fas fa-moon text-gray-600 dark:text-yellow-300"
               id="themeIcon"></i>
           </button>
+          <!-- Tombol keranjang belanja -->
           <button
             class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
             <i
@@ -84,6 +95,7 @@
       </div>
     </header>
 
+    <!-- Modal pencarian -->
     <div
       id="searchModal"
       class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden flex items-center justify-center">
@@ -94,7 +106,7 @@
           <input
             type="text"
             id="searchInput"
-            placeholder="Search products..."
+            placeholder="Cari produk..."
             class="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
           <button
             id="closeSearch"
@@ -108,68 +120,133 @@
       </div>
     </div>
 
+    <!-- Modal detail produk -->
     <div
-      id="serverSelectionModal"
-      class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden flex items-center justify-center">
+      id="productDetailModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden flex items-center justify-center p-4">
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-xl mx-4">
-        <div
-          class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3 mb-4">
-          <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-            Select Server & Diamonds
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto transform transition-all sm:my-8 sm:align-middle sm:max-w-lg">
+        <div class="flex justify-between items-center mb-4">
+          <h3
+            class="text-2xl font-bold text-gray-900 dark:text-white"
+            id="modalProductName">
+            Nama Produk
           </h3>
           <button
-            id="closeServerModal"
+            id="closeProductDetailModal"
             class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-            <i class="fas fa-times text-lg"></i>
+            <i class="fas fa-times text-xl"></i>
           </button>
         </div>
-        <div id="serverOptionsContainer" class="space-y-4">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2">
+            <img
+              id="modalProductImage"
+              src="https://placehold.co/400x300/e0e0e0/ffffff?text=Product"
+              alt="Product Image"
+              class="w-full h-auto rounded-lg object-contain" />
           </div>
-        <div id="diamondOptionsContainer" class="mt-6 hidden">
-          <h4
-            class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
-            Choose Diamond Package (<span id="selectedServerName"></span>)
-          </h4>
-          <div
-            id="diamondList"
-            class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="md:w-1/2">
+            <p class="text-gray-700 dark:text-gray-300 mb-2">
+              Harga:
+              <span
+                class="font-semibold text-whatsapp"
+                id="modalProductPrice">
+                Rp 0
+              </span>
+            </p>
+            <div
+              id="serverSelection"
+              class="mb-4 hidden">
+              <label
+                for="serverSelect"
+                class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                Pilih Server:
+              </label>
+              <select
+                id="serverSelect"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                <!-- Opsi server akan dimuat di sini -->
+              </select>
             </div>
+            <div
+              id="optionSelection"
+              class="mb-4 hidden">
+              <label
+                for="optionSelect"
+                class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                Pilih Opsi:
+              </label>
+              <select
+                id="optionSelect"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                <!-- Opsi berlian akan dimuat di sini -->
+              </select>
+            </div>
+            <button
+              id="modalBuyButton"
+              class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-3 rounded-md flex items-center justify-center space-x-2 text-lg font-semibold transition duration-200">
+              <i class="fab fa-whatsapp"></i>
+              <span>Beli Sekarang</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Modal pesan kustom (pengganti alert) -->
+    <div
+      id="customMessageModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 text-center shadow-xl">
+        <p
+          class="text-gray-800 dark:text-white mb-4"
+          id="customMessageText">
+          Pesan Anda di sini.
+        </p>
+        <button
+          id="closeCustomMessageModal"
+          class="bg-whatsapp hover:bg-whatsappDark text-white px-6 py-2 rounded-md font-semibold">
+          Oke
+        </button>
+      </div>
+    </div>
+
     <main class="container mx-auto px-4 py-6">
+      <!-- Bagian banner/promosi -->
       <section
         class="mb-8 bg-gradient-to-r from-whatsapp to-whatsappDark rounded-xl p-6 text-white">
         <div class="max-w-2xl">
-          <h2 class="text-3xl font-bold mb-2">Shop Directly on WhatsApp</h2>
+          <h2 class="text-3xl font-bold mb-2">Belanja Langsung di WhatsApp</h2>
           <p class="mb-4">
-            Browse our catalog and order products directly through WhatsApp.
-            Fast, easy, and secure!
+            Jelajahi katalog kami dan pesan produk langsung melalui WhatsApp.
+            Cepat, mudah, dan aman!
           </p>
           <div class="flex items-center space-x-2">
             <i class="fas fa-check-circle"></i>
-            <span>Instant messaging with sellers</span>
+            <span>Pesan instan dengan penjual</span>
           </div>
           <div class="flex items-center space-x-2">
             <i class="fas fa-check-circle"></i>
-            <span>Secure payment options</span>
+            <span>Opsi pembayaran aman</span>
           </div>
           <div class="flex items-center space-x-2">
             <i class="fas fa-check-circle"></i>
-            <span>24/7 customer support</span>
+            <span>Dukungan pelanggan 24/7</span>
           </div>
         </div>
       </section>
 
+      <!-- Bagian kategori produk -->
       <section class="mb-8">
         <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">
-          Categories
+          Kategori
         </h2>
         <div
           id="categoriesContainer"
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <!-- Skeleton loaders untuk kategori -->
           <div
             class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer skeleton">
             <div
@@ -201,22 +278,24 @@
         </div>
       </section>
 
+      <!-- Bagian daftar produk -->
       <section class="mb-8">
         <div class="flex justify-between items-center mb-4">
           <h2
             class="text-xl font-bold text-gray-800 dark:text-white"
             id="productsSectionTitle">
-            Featured Products
+            Produk Unggulan
           </h2>
           <button
             class="text-whatsapp font-medium hover:underline"
             id="viewAllProductsBtn">
-            View All
+            Lihat Semua
           </button>
         </div>
         <div
           id="productsContainer"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- Skeleton loaders untuk produk -->
           <div
             class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
             <div class="skeleton h-48 bg-gray-200 dark:bg-gray-700"></div>
@@ -268,10 +347,11 @@
         </div>
       </section>
 
+      <!-- Bagian "Cara Kerja" -->
       <section class="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <h2
           class="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-          How It Works
+          Cara Kerjanya
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="text-center">
@@ -280,10 +360,10 @@
               <i class="fas fa-search text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
-              1. Browse Products
+              1. Jelajahi Produk
             </h3>
             <p class="text-gray-600 dark:text-gray-400">
-              Explore our catalog and find what you need
+              Jelajahi katalog kami dan temukan apa yang Anda butuhkan
             </p>
           </div>
           <div class="text-center">
@@ -292,10 +372,10 @@
               <i class="fab fa-whatsapp text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
-              2. Chat on WhatsApp
+              2. Chat di WhatsApp
             </h3>
             <p class="text-gray-600 dark:text-gray-400">
-              Click "Buy Now" to start chatting with the seller
+              Klik "Beli Sekarang" untuk mulai chat dengan penjual
             </p>
           </div>
           <div class="text-center">
@@ -304,16 +384,17 @@
               <i class="fas fa-truck text-whatsapp text-2xl"></i>
             </div>
             <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
-              3. Get Your Order
+              3. Dapatkan Pesanan Anda
             </h3>
             <p class="text-gray-600 dark:text-gray-400">
-              Receive your product with secure delivery
+              Terima produk Anda dengan pengiriman yang aman
             </p>
           </div>
         </div>
       </section>
     </main>
 
+    <!-- Footer aplikasi -->
     <footer
       class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
       <div class="container mx-auto px-4 py-6">
@@ -324,41 +405,41 @@
               WhatsApp Shop
             </h3>
             <p class="text-gray-600 dark:text-gray-400">
-              Shop directly through WhatsApp with our trusted sellers.
+              Belanja langsung melalui WhatsApp dengan penjual terpercaya kami.
             </p>
           </div>
           <div>
             <h3
               class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-              Quick Links
+              Tautan Cepat
             </h3>
             <ul class="space-y-2">
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Home
+                  Beranda
                 </a>
               </li>
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Products
+                  Produk
                 </a>
               </li>
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Categories
+                  Kategori
                 </a>
               </li>
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Contact
+                  Kontak
                 </a>
               </li>
             </ul>
@@ -366,36 +447,35 @@
           <div>
             <h3
               class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-              Help
+              Bantuan
             </h3>
             <ul class="space-y-2">
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  FAQs
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  href="#"
-                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Shipping
+                  FAQ
                 </a>
               </li>
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Returns
+                  Pengiriman
                 </a>
               </li>
               <li>
                 <a
                   href="#"
                   class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
-                  Privacy Policy
+                  Pengembalian
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-whatsapp">
+                  Kebijakan Privasi
                 </a>
               </li>
             </ul>
@@ -403,7 +483,7 @@
           <div>
             <h3
               class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-              Connect With Us
+              Terhubung Dengan Kami
             </h3>
             <div class="flex space-x-4">
               <a
@@ -431,18 +511,59 @@
         </div>
         <div
           class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center text-gray-600 dark:text-gray-400">
-          <p>© 2023 WhatsApp Shop. All rights reserved.</p>
+          <p>© 2023 WhatsApp Shop. Hak cipta dilindungi.</p>
         </div>
       </div>
     </footer>
 
     <script>
-      // Theme Toggle
+      // Mengambil elemen-elemen DOM yang dibutuhkan
       const themeToggle = document.getElementById("themeToggle");
       const themeIcon = document.getElementById("themeIcon");
       const html = document.documentElement;
 
-      // Check for saved theme preference or use system preference
+      const searchBtn = document.getElementById("searchBtn");
+      const searchModal = document.getElementById("searchModal");
+      const closeSearch = document.getElementById("closeSearch");
+      const searchInput = document.getElementById("searchInput");
+      const searchResults = document.getElementById("searchResults");
+
+      const productDetailModal = document.getElementById("productDetailModal");
+      const closeProductDetailModal = document.getElementById(
+        "closeProductDetailModal"
+      );
+      const modalProductName = document.getElementById("modalProductName");
+      const modalProductImage = document.getElementById("modalProductImage");
+      const modalProductPrice = document.getElementById("modalProductPrice");
+      const serverSelection = document.getElementById("serverSelection");
+      const serverSelect = document.getElementById("serverSelect");
+      const optionSelection = document.getElementById("optionSelection");
+      const optionSelect = document.getElementById("optionSelect");
+      const modalBuyButton = document.getElementById("modalBuyButton");
+
+      const customMessageModal = document.getElementById("customMessageModal");
+      const customMessageText = document.getElementById("customMessageText");
+      const closeCustomMessageModal = document.getElementById(
+        "closeCustomMessageModal"
+      );
+
+      let allProducts = []; // Menyimpan semua produk untuk fungsionalitas pencarian
+      let whatsappNumber = ""; // Menyimpan nomor WhatsApp secara global
+      let currentActiveCategory = null; // Melacak kategori yang sedang aktif
+      let selectedProduct = null; // Menyimpan produk yang sedang dilihat di modal
+
+      // Fungsi untuk menampilkan modal pesan kustom
+      function showCustomMessage(message) {
+        customMessageText.textContent = message;
+        customMessageModal.classList.remove("hidden");
+      }
+
+      // Menutup modal pesan kustom
+      closeCustomMessageModal.addEventListener("click", () => {
+        customMessageModal.classList.add("hidden");
+      });
+
+      // Mengatur tema (terang/gelap)
       if (
         localStorage.getItem("theme") === "dark" ||
         (!localStorage.getItem("theme") &&
@@ -463,16 +584,7 @@
         }
       });
 
-      // Search Modal
-      const searchBtn = document.getElementById("searchBtn");
-      const searchModal = document.getElementById("searchModal");
-      const closeSearch = document.getElementById("closeSearch");
-      const searchInput = document.getElementById("searchInput");
-      const searchResults = document.getElementById("searchResults");
-      let allProducts = []; // To store all products for search functionality
-      let whatsappNumber = ""; // To store WhatsApp number globally
-      let currentActiveCategory = null; // To track the currently active category
-
+      // Fungsionalitas modal pencarian
       searchBtn.addEventListener("click", () => {
         searchModal.classList.remove("hidden");
         searchInput.focus();
@@ -480,6 +592,8 @@
 
       closeSearch.addEventListener("click", () => {
         searchModal.classList.add("hidden");
+        searchResults.classList.add("hidden"); // Sembunyikan hasil pencarian saat modal ditutup
+        searchInput.value = ""; // Bersihkan input pencarian
       });
 
       searchInput.addEventListener("input", (e) => {
@@ -491,10 +605,11 @@
         }
       });
 
+      // Fungsi untuk memfilter produk berdasarkan query pencarian
       function filterProducts(query) {
         searchResults.innerHTML = `
                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Searching for "${query}"
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Mencari "${query}"
                 </div>
             `;
         searchResults.classList.remove("hidden");
@@ -517,7 +632,7 @@
                                 <div class="text-sm text-gray-500 dark:text-gray-400">${item.harga} • ${item.category}</div>
                             `;
               resultItem.addEventListener("click", () => {
-                alert(`Navigating to ${item.name}`);
+                showCustomMessage(`Menavigasi ke ${item.name}`); // Menggunakan modal kustom
                 searchModal.classList.add("hidden");
               });
               searchResults.appendChild(resultItem);
@@ -525,108 +640,120 @@
           } else {
             searchResults.innerHTML = `
                                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
-                                    No results found for "${query}"
+                                    Tidak ada hasil ditemukan untuk "${query}"
                                 </div>
                             `;
           }
         }, 300);
       }
 
-      // Server Selection Modal Elements
-      const serverSelectionModal = document.getElementById(
-        "serverSelectionModal"
-      );
-      const closeServerModal = document.getElementById("closeServerModal");
-      const serverOptionsContainer = document.getElementById(
-        "serverOptionsContainer"
-      );
-      const diamondOptionsContainer = document.getElementById(
-        "diamondOptionsContainer"
-      );
-      const selectedServerName = document.getElementById("selectedServerName");
-      const diamondList = document.getElementById("diamondList");
+      // Fungsi untuk menampilkan detail produk di modal
+      function showProductDetail(product) {
+        selectedProduct = product; // Set produk yang dipilih
+        modalProductName.textContent = product.name;
+        modalProductImage.src = product.images;
+        modalProductImage.alt = product.name;
+        modalProductPrice.textContent = product.harga;
 
-      closeServerModal.addEventListener("click", () => {
-        serverSelectionModal.classList.add("hidden");
-        // Reset modal state
-        serverOptionsContainer.innerHTML = "";
-        diamondOptionsContainer.classList.add("hidden");
-        diamondList.innerHTML = "";
-      });
-
-      function openServerSelection(product) {
-        serverOptionsContainer.innerHTML = ""; // Clear previous server options
-        diamondOptionsContainer.classList.add("hidden"); // Hide diamond options initially
-        diamondList.innerHTML = ""; // Clear previous diamond options
+        // Reset dan sembunyikan pilihan server/opsi secara default
+        serverSelection.classList.add("hidden");
+        optionSelection.classList.add("hidden");
+        serverSelect.innerHTML = "";
+        optionSelect.innerHTML = "";
 
         if (product.servers && product.servers.length > 0) {
-          product.servers.forEach((server) => {
-            const serverButton = document.createElement("button");
-            serverButton.className =
-              "w-full text-left p-3 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center space-x-2 text-gray-800 dark:text-white";
-            serverButton.innerHTML = `
-                        <span class="text-2xl">${server.flag}</span>
-                        <span>${server.name}</span>
-                    `;
-            serverButton.addEventListener("click", () => {
-              displayDiamondOptions(product, server);
-            });
-            serverOptionsContainer.appendChild(serverButton);
+          serverSelection.classList.remove("hidden");
+          product.servers.forEach((server, index) => {
+            const option = document.createElement("option");
+            option.value = index; // Menggunakan indeks sebagai nilai
+            option.textContent = `${server.name} ${server.flag}`;
+            serverSelect.appendChild(option);
           });
-          serverSelectionModal.classList.remove("hidden");
+
+          // Tampilkan opsi pertama dari server pertama secara default
+          displayOptionsForServer(product.servers[0]);
+
+          serverSelect.onchange = (event) => {
+            const selectedServerIndex = event.target.value;
+            displayOptionsForServer(product.servers[selectedServerIndex]);
+          };
+        }
+
+        productDetailModal.classList.remove("hidden");
+      }
+
+      // Fungsi untuk menampilkan opsi berlian/harga berdasarkan server yang dipilih
+      function displayOptionsForServer(server) {
+        optionSelect.innerHTML = ""; // Bersihkan opsi sebelumnya
+        if (server.options && server.options.length > 0) {
+          optionSelection.classList.remove("hidden");
+          server.options.forEach((optionData, index) => {
+            const option = document.createElement("option");
+            option.value = index; // Menggunakan indeks sebagai nilai
+            // Menyesuaikan tampilan opsi berdasarkan adanya 'diamonds' atau tidak
+            if (optionData.diamonds) {
+              option.textContent = `${optionData.diamonds} Diamonds - ${optionData.price}`;
+            } else {
+              option.textContent = optionData.price; // Jika tidak ada berlian, tampilkan hanya harga
+            }
+            optionSelect.appendChild(option);
+          });
         } else {
-          // If no servers, proceed with direct purchase or show error
-          buyOnWhatsApp(product.name, product.harga, product.images, whatsappNumber);
+          optionSelection.classList.add("hidden");
         }
       }
 
-      function displayDiamondOptions(product, server) {
-        selectedServerName.textContent = server.name;
-        diamondList.innerHTML = ""; // Clear previous diamond options
+      // Menutup modal detail produk
+      closeProductDetailModal.addEventListener("click", () => {
+        productDetailModal.classList.add("hidden");
+      });
 
-        server.options.forEach((option) => {
-          const diamondOptionCard = document.createElement("div");
-          diamondOptionCard.className =
-            "p-3 border border-gray-300 dark:border-gray-700 rounded-md text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition";
-          diamondOptionCard.innerHTML = `
-                    <p class="font-bold text-lg text-gray-800 dark:text-white">${option.diamonds}💎</p>
-                    <p class="text-whatsapp font-semibold">${option.price}</p>
-                `;
-          diamondOptionCard.addEventListener("click", () => {
-            const fullProductName = `${product.name} (${server.name} - ${option.diamonds}💎)`;
-            buyOnWhatsApp(
-              fullProductName,
-              option.price,
-              product.images,
-              whatsappNumber
-            );
-            serverSelectionModal.classList.add("hidden"); // Close modal after selection
-          });
-          diamondList.appendChild(diamondOptionCard);
-        });
+      // Fungsi untuk membeli di WhatsApp dari modal detail produk
+      modalBuyButton.addEventListener("click", () => {
+        if (!selectedProduct) return;
 
-        // Hide server options and show diamond options
-        serverOptionsContainer.classList.add("hidden");
-        diamondOptionsContainer.classList.remove("hidden");
-      }
+        let message = `Halo! Saya tertarik untuk membeli:\n\n*${selectedProduct.name}*\n`;
+        let selectedPrice = selectedProduct.harga; // Harga default dari produk
 
-      // Buy on WhatsApp function (now also handles specific diamond options)
-      function buyOnWhatsApp(productName, price, imageUrl, number) {
-        const message = `Hello! I'm interested in buying:\n\n*${productName}*\nPrice: ${price}\n\nCan you provide more details?`;
+        if (selectedProduct.servers && selectedProduct.servers.length > 0) {
+          const selectedServerIndex = serverSelect.value;
+          const selectedServer = selectedProduct.servers[selectedServerIndex];
+          message += `Server: ${selectedServer.name} ${selectedServer.flag}\n`;
+
+          if (selectedServer.options && selectedServer.options.length > 0) {
+            const selectedOptionIndex = optionSelect.value;
+            const selectedOption = selectedServer.options[selectedOptionIndex];
+
+            if (selectedOption.diamonds) {
+              message += `Jumlah: ${selectedOption.diamonds} Diamonds\n`;
+            }
+            selectedPrice = selectedOption.price;
+            message += `Harga: ${selectedPrice}\n`;
+          }
+        } else {
+          message += `Harga: ${selectedPrice}\n`;
+        }
+
+        message += `\nBisakah Anda memberikan detail lebih lanjut?`;
+
         const encodedMessage = encodeURIComponent(message);
-        window.open(`https://wa.me/${number}?text=${encodedMessage}`, "_blank");
-      }
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
+          "_blank"
+        );
+        productDetailModal.classList.add("hidden"); // Tutup modal setelah mengklik beli
+      });
 
-      // Function to display products
+      // Fungsi untuk menampilkan produk di container
       function displayProducts(productsToDisplay) {
         const productsContainer = document.getElementById("productsContainer");
-        productsContainer.innerHTML = ""; // Clear existing products or skeletons
+        productsContainer.innerHTML = ""; // Bersihkan produk atau skeleton yang ada
 
         if (productsToDisplay.length === 0) {
           productsContainer.innerHTML = `
             <div class="col-span-full text-center py-8">
               <i class="fas fa-box-open text-3xl text-gray-400 mb-3"></i>
-              <p class="text-gray-600 dark:text-gray-400">No products found for this category.</p>
+              <p class="text-gray-600 dark:text-gray-400">Tidak ada produk ditemukan untuk kategori ini.</p>
             </div>
           `;
           return;
@@ -635,33 +762,7 @@
         productsToDisplay.forEach((product) => {
           const productCard = document.createElement("div");
           productCard.className =
-            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300";
-
-          let buttonHtml;
-          if (
-            product.category.toLowerCase() === "mobile legends" &&
-            product.servers &&
-            product.servers.length > 0
-          ) {
-            buttonHtml = `
-                        <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
-                            onclick="openServerSelection(${encodeURIComponent(
-                              JSON.stringify(product)
-                            ).replace(/'/g, "\\'")})">
-                            <i class="fas fa-bars"></i>
-                            <span>Select Options</span>
-                        </button>
-                    `;
-          } else {
-            buttonHtml = `
-                        <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
-                            onclick="buyOnWhatsApp('${product.name}', '${product.harga}', '${product.images}', '${whatsappNumber}')">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>Buy Now</span>
-                        </button>
-                    `;
-          }
-
+            "product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300 cursor-pointer"; // Tambahkan cursor-pointer
           productCard.innerHTML = `
                         <div class="h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                             <img src="${product.images}" alt="${product.name}" class="h-full object-contain p-4">
@@ -669,17 +770,27 @@
                         <div class="p-4">
                             <h3 class="font-medium text-gray-800 dark:text-white mb-1 truncate">${product.name}</h3>
                             <p class="text-whatsapp font-semibold mb-3">${product.harga}</p>
-                            ${buttonHtml}
+                            <!-- Tombol ini sekarang akan membuka modal detail produk -->
+                            <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md flex items-center justify-center space-x-2"
+                                data-product-id="${product.name}"> <!-- Gunakan ID produk untuk identifikasi -->
+                                <i class="fas fa-info-circle"></i>
+                                <span>Lihat Detail</span>
+                            </button>
                         </div>
                     `;
           productsContainer.appendChild(productCard);
+
+          // Tambahkan event listener untuk tombol "Lihat Detail"
+          productCard
+            .querySelector("button")
+            .addEventListener("click", () => showProductDetail(product));
         });
       }
 
-      // Load products and categories from JSON file
+      // Muat produk dan kategori dari file JSON
       document.addEventListener("DOMContentLoaded", () => {
         const GIST_RAW_URL =
-          "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/cbb39368f658c3739d3e7891d5196deb7f316885/produk.json"; // Pastikan URL ini sesuai dengan Gist terbaru Anda
+          "https://gist.githubusercontent.com/xnaomicity/881dc02530c5be390a873908777ff627/raw/cbb39368f658c3739d3e7891d5196deb7f316885/produk.json";
 
         fetch(GIST_RAW_URL)
           .then((response) => {
@@ -689,28 +800,22 @@
             return response.json();
           })
           .then((data) => {
-            allProducts = data.items; // Store all products
+            allProducts = data.items; // Simpan semua produk
             const categories = data.category;
-            whatsappNumber = data.nomber; // Store WhatsApp number
+            whatsappNumber = data.nomber; // Simpan nomor WhatsApp
 
-            // Initial display of all products
+            // Tampilan awal semua produk
             displayProducts(allProducts);
 
-            // Render Categories
+            // Render Kategori
             const categoriesContainer = document.getElementById(
               "categoriesContainer"
             );
-            categoriesContainer.innerHTML = ""; // Clear skeleton loaders
+            categoriesContainer.innerHTML = ""; // Bersihkan skeleton loaders
             const categoryIcons = {
               "mobile legends": "fas fa-gamepad",
               pubg: "fas fa-crosshairs",
               // Tambahkan mapping untuk kategori lain jika ada
-              // "fashion": "fas fa-tshirt",
-              // "electronics": "fas fa-mobile-alt",
-              // "home": "fas fa-home",
-              // "food": "fas fa-utensils",
-              // "books": "fas fa-book",
-              // "more": "fas fa-ellipsis-h"
             };
 
             categories.forEach((categoryName) => {
@@ -719,7 +824,7 @@
               const categoryCard = document.createElement("div");
               categoryCard.className =
                 "category-card bg-white dark:bg-gray-800 rounded-lg p-4 text-center shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition";
-              categoryCard.dataset.category = categoryName; // Store category name in data attribute
+              categoryCard.dataset.category = categoryName; // Simpan nama kategori di atribut data
               categoryCard.innerHTML = `
                     <i class="${iconClass} text-2xl mb-2 text-whatsapp"></i>
                     <p class="text-sm font-medium text-gray-700 dark:text-gray-300">${categoryName}</p>
@@ -733,30 +838,30 @@
                 const currentCards =
                   document.querySelectorAll(".category-card");
 
-                // Remove active class from all category cards
+                // Hapus kelas aktif dari semua kartu kategori
                 currentCards.forEach((card) => card.classList.remove("active"));
 
                 if (currentActiveCategory === clickedCategory) {
-                  // If the same category is clicked again, show all products
+                  // Jika kategori yang sama diklik lagi, tampilkan semua produk
                   displayProducts(allProducts);
-                  productsSectionTitle.textContent = "Featured Products";
-                  currentActiveCategory = null; // Reset active category
+                  productsSectionTitle.textContent = "Produk Unggulan";
+                  currentActiveCategory = null; // Reset kategori aktif
                 } else {
-                  // Filter products by the clicked category
+                  // Filter produk berdasarkan kategori yang diklik
                   const filteredProducts = allProducts.filter(
                     (product) =>
                       product.category.toLowerCase() === clickedCategory
                   );
                   displayProducts(filteredProducts);
-                  productsSectionTitle.textContent = `Products in "${categoryName}"`;
-                  categoryCard.classList.add("active"); // Add active class to clicked card
-                  currentActiveCategory = clickedCategory; // Set new active category
+                  productsSectionTitle.textContent = `Produk dalam "${categoryName}"`;
+                  categoryCard.classList.add("active"); // Tambahkan kelas aktif ke kartu yang diklik
+                  currentActiveCategory = clickedCategory; // Atur kategori aktif baru
                 }
               });
               categoriesContainer.appendChild(categoryCard);
             });
 
-            // Add event listener to View All Products button
+            // Tambahkan event listener ke tombol "Lihat Semua Produk"
             const viewAllProductsBtn =
               document.getElementById("viewAllProductsBtn");
             viewAllProductsBtn.addEventListener("click", () => {
@@ -764,11 +869,11 @@
               const productsSectionTitle = document.getElementById(
                 "productsSectionTitle"
               );
-              productsSectionTitle.textContent = "Featured Products";
-              // Remove active class from all category cards
+              productsSectionTitle.textContent = "Produk Unggulan";
+              // Hapus kelas aktif dari semua kartu kategori
               const currentCards = document.querySelectorAll(".category-card");
               currentCards.forEach((card) => card.classList.remove("active"));
-              currentActiveCategory = null; // Reset active category
+              currentActiveCategory = null; // Reset kategori aktif
             });
           })
           .catch((error) => {
@@ -778,9 +883,9 @@
             productsContainer.innerHTML = `
                             <div class="col-span-full text-center py-8">
                                 <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-3"></i>
-                                <p class="text-gray-600 dark:text-gray-400">Failed to load products. Please check the Gist URL and your internet connection. (Error: ${error.message})</p>
+                                <p class="text-gray-600 dark:text-gray-400">Gagal memuat produk. Harap periksa URL Gist dan koneksi internet Anda. (Error: ${error.message})</p>
                                 <button class="mt-4 bg-whatsapp text-white px-4 py-2 rounded-md" onclick="location.reload()">
-                                    <i class="fas fa-sync-alt mr-2"></i> Reload
+                                    <i class="fas fa-sync-alt mr-2"></i> Muat Ulang
                                 </button>
                             </div>
                         `;
@@ -790,7 +895,7 @@
             if (categoriesContainer) {
               categoriesContainer.innerHTML = `
                     <div class="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
-                        Failed to load categories.
+                        Gagal memuat kategori.
                     </div>
                 `;
             }
