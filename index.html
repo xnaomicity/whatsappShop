@@ -779,22 +779,39 @@
                 product.servers.forEach((server) => {
                   if (server.options && server.options.length > 0) {
                     server.options.forEach((option) => {
-                      allPurchasableItems.push({
-                        productName: product.name,
-                        category: product.category,
-                        serverName: server.name,
-                        serverFlag: server.flag,
-                        diamonds: option.diamonds,
-                        displayPrice: option.price,
-                        imageUrl: product.images,
-                        displayText: `${product.name} - ${server.name} ${
-                          server.flag
-                        }${
-                          option.diamonds
-                            ? " - " + option.diamonds + " Diamonds"
-                            : ""
-                        }`, // Untuk pencarian
-                      });
+                      let cardHtml = "";
+                      let titleText = "";
+                      let priceText = option.price; // Price will always be option.price
+                      let imageUrl = ""; // Initialize imageUrl
+
+                      if (server.name === "WEEKLY DIAMOND PASS") {
+                        titleText = `Weekly Diamond Pass (${option.location} ${option.flag})`; // Title from location and flag
+                        // Example: Using a generic image for WDP or a specific one if available
+                        imageUrl =
+                          "https://example.com/weekly_diamond_pass_default.png"; // Replace with an actual WDP image URL
+                        // OR, if you add image URLs to your JSON for WDP options:
+                        // imageUrl = option.imageUrl || 'https://example.com/weekly_diamond_pass_default.png';
+                      } else {
+                        // Existing logic for other server types (e.g., diamonds)
+                        titleText = `${option.diamonds}💎 Diamonds`;
+                        imageUrl = item.images; // Use the main item image for diamond top-ups
+                      }
+
+                      cardHtml += `
+        <div class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm transition duration-300">
+            <img src="${imageUrl}" alt="${titleText}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">${titleText}</h3>
+                <p class="text-whatsapp font-bold text-xl mb-3">${priceText}</p>
+                <button class="w-full bg-whatsapp hover:bg-whatsappDark text-white py-2 rounded-md font-semibold"
+                        data-product-name="${titleText}"
+                        data-product-price="${priceText}">
+                    Beli Sekarang
+                </button>
+            </div>
+        </div>
+    `;
+                      // Append cardHtml to your productsContainer
                     });
                   } else {
                     // Jika server ada tapi tidak ada opsi spesifik, gunakan harga produk utama
