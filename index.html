@@ -593,16 +593,16 @@
 
       // Fungsi untuk membeli di WhatsApp
       function buyOnWhatsApp(itemData) {
-        let message = `Halo! Saya tertarik untuk membeli:\n\n*${itemData.productName}`;
+        let message = `Halo! Saya tertarik untuk membeli:\n\n`;
         if (itemData.serverName) {
-          message += ` - ${itemData.serverName} ${itemData.serverFlag || ''}`; // Add flag if available
+          message += ` ${itemData.serverName} ${itemData.serverFlag || ""}`; // Add flag if available
         }
         if (itemData.diamonds) {
           message += ` - ${itemData.diamonds} Diamonds`;
         }
         // For Weekly Diamond Pass, add location to the message
         if (itemData.isWeeklyDiamondPass && itemData.location) {
-            message += ` (${itemData.location} ${itemData.flag})`;
+          message += ` (${itemData.location} ${itemData.flag})`;
         }
 
         message += `*\n`;
@@ -644,11 +644,15 @@
             // Ubah cardTitle menjadi hanya lokasi dan flag
             cardTitle = `${item.location} ${item.flag}`;
             // Use a placeholder image for WDP, or specify one in your JSON
-            imageUrl = item.imageUrl || "https://placehold.co/400x200/cccccc/ffffff?text=WDP";
+            imageUrl =
+              item.imageUrl ||
+              "https://placehold.co/400x200/cccccc/ffffff?text=WDP";
           } else if (item.diamonds) {
             // Untuk produk diamond biasa, tampilkan jumlah diamond dan nama server
             cardTitle = `${item.diamonds}💎 Diamonds`;
-            diamondsText = `<p class="text-gray-700 dark:text-gray-300">Server: <span class="font-semibold">${item.serverName} ${item.serverFlag || ''}</span></p>`;
+            diamondsText = `<p class="text-gray-700 dark:text-gray-300">Server: <span class="font-semibold">${
+              item.serverName
+            } ${item.serverFlag || ""}</span></p>`;
           } else {
             cardTitle = item.productName;
           }
@@ -708,7 +712,7 @@
           const server = JSON.parse(serverString);
           const option = document.createElement("option");
           option.value = server.name;
-          option.textContent = `${server.name} ${server.flag || ''}`; // Include flag if available
+          option.textContent = `${server.name} ${server.flag || ""}`; // Include flag if available
           serverSelect.appendChild(option);
         });
 
@@ -793,7 +797,7 @@
                     server.options.forEach((option) => {
                       // Determine if it's a Weekly Diamond Pass or a regular diamond option
                       const isWDP = server.name === "WEEKLY DIAMOND PASS";
-                      
+
                       allPurchasableItems.push({
                         productName: product.name,
                         category: product.category,
@@ -802,10 +806,12 @@
                         diamonds: option.diamonds || null, // Will be null for WDP
                         displayPrice: option.price,
                         imageUrl: product.images, // Default to product's main image
-                        displayText: isWDP ? `Weekly Diamond Pass (${option.location})` : `${product.name} - ${option.diamonds} Diamonds (${server.name})`,
+                        displayText: isWDP
+                          ? `Weekly Diamond Pass (${option.location})`
+                          : `${product.name} - ${option.diamonds} Diamonds (${server.name})`,
                         isWeeklyDiamondPass: isWDP, // Flag to identify WDP
                         location: option.location || null, // For WDP
-                        flag: option.flag || null // For WDP
+                        flag: option.flag || null, // For WDP
                       });
                     });
                   } else {
@@ -822,7 +828,7 @@
                       displayText: `${product.name} - ${server.name}`,
                       isWeeklyDiamondPass: false,
                       location: null,
-                      flag: null
+                      flag: null,
                     });
                   }
                 });
@@ -839,7 +845,7 @@
                   displayText: product.name,
                   isWeeklyDiamondPass: false,
                   location: null,
-                  flag: null
+                  flag: null,
                 });
               }
             });
