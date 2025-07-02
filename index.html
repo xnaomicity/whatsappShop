@@ -646,8 +646,9 @@
             // Use a placeholder image for WDP, or specify one in your JSON
             imageUrl = item.imageUrl || "https://placehold.co/400x200/cccccc/ffffff?text=WDP";
           } else if (item.diamonds) {
-            cardTitle = `${item.serverName}`;
-            diamondsText = `<p class="text-gray-700 dark:text-gray-300">Diamonds: <span class="font-semibold">${item.diamonds}</span></p>`;
+            // Untuk produk diamond biasa, tampilkan jumlah diamond dan nama server
+            cardTitle = `${item.diamonds}💎 Diamonds`;
+            diamondsText = `<p class="text-gray-700 dark:text-gray-300">Server: <span class="font-semibold">${item.serverName} ${item.serverFlag || ''}</span></p>`;
           } else {
             cardTitle = item.productName;
           }
