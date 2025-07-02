@@ -593,9 +593,9 @@
 
       // Fungsi untuk membeli di WhatsApp
       function buyOnWhatsApp(itemData) {
-        let message = `Halo! Saya tertarik untuk membeli:\n\n`;
+        let message = `Halo! Saya tertarik untuk membeli:*`;
         if (itemData.serverName) {
-          message += ` ${itemData.serverName} ${itemData.serverFlag || ""}`; // Add flag if available
+          message += `${itemData.serverName} ${itemData.serverFlag || ""}`; // Add flag if available
         }
         if (itemData.diamonds) {
           message += ` - ${itemData.diamonds} Diamonds`;
